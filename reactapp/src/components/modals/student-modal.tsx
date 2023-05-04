@@ -1,8 +1,7 @@
 import React, { useContext, useRef } from "react";
-import { Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, ModalFooter, Button, Alert } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, ModalFooter, Button } from "reactstrap";
 import { addStudent } from "../../services/api-service";
 import { ModalPropsType } from "../../models/props";
-import { after } from "node:test";
 import { AuthContext } from "../../contexts/auth-context";
 
 export const StudentModal = ({ isOpen, toggle, add, afterSave }: ModalPropsType & { add: (subj: any) => void}) => {

@@ -1,4 +1,3 @@
-import User from "../models/user.js";
 import { createGuid } from "../utils/utils.js";
 import { postData, getData, deleteData } from "./call-api.js";
 

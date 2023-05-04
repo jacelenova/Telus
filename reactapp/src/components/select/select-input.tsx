@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react';
-import { Button, Col, FormGroup, Input, Label, Row } from 'reactstrap';
-import SubjectType from '../../models/subject';
+import { Col, FormGroup, Input, Label, Row } from 'reactstrap';
 
 type SelectInputProps = {
   options: { id: string, name: string }[];

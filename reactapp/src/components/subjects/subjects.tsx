@@ -3,7 +3,7 @@ import { AuthContext } from "../../contexts/auth-context";
 import { useNavigate } from "react-router-dom";
 import { Role } from "../../utils/enums";
 import { Button, Row, Table } from "reactstrap";
-import { addSubject, deleteSubject, getSubjects } from "../../services/api-service";
+import { deleteSubject, getSubjects } from "../../services/api-service";
 import { SubjectModal } from "../modals/subject-modal";
 
 export const Subjects = () => {
