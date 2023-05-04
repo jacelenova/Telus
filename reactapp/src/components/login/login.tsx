@@ -59,8 +59,8 @@ export const Login = () => {
         )
       }
 
-      <Button onClick={submit}>
-        Submit
+      <Button onClick={submit} color="primary">
+        Log In
       </Button>
     </>
   )
