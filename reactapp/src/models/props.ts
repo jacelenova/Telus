@@ -6,7 +6,8 @@ export type Props = {
 
 export type ModalPropsType = {
   isOpen: boolean,
-  toggle: () => void
+  toggle: () => void,
+  afterSave?: () => Promise<void> | null
 }
 
 export default Props;

@@ -37,6 +37,34 @@ namespace webapi.Controllers
         }
 
         [Authorize]
+        [HttpGet("GetStudentById")]
+        public async Task<IActionResult> GetStudentById(Guid Id)
+        {
+            var ss = await _studentService.GetStudentById(Id);
+            if (ss == null) return NotFound();
+
+            return Ok(ss);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetStudentByIdWithSubjects")]
+        public async Task<IActionResult> GetStudentByIdWithSubjects(Guid Id)
+        {
+            var ss = await _studentService.GetStudentByIdIncludeAll(Id);
+            if (ss == null) return NotFound();
+
+            var res = new StudentDto()
+            {
+                Id = ss.Id,
+                FirstName = ss.User.FirstName,
+                LastName = ss.User.LastName,
+                EmailAddress = ss.User.EmailAddress,
+                Subjects = ss.StudentSubjects.Select(ss => ss.Subject).ToList()
+            };
+            return Ok(res);
+        }
+
+        [Authorize]
         [HttpGet("GetStudentGrade")]
         public async Task<IActionResult> GetStudentGrade(Guid Id)
         {
@@ -46,10 +74,18 @@ namespace webapi.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Add(StudentSaveDto student)
+        [HttpPost("AddStudent")]
+        public async Task<IActionResult> AddStudent(StudentSaveDto student)
         {
             var result = await _studentService.NewStudent(student);
+            return Ok(student);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("Update")]
+        public async Task<IActionResult> Update(StudentSaveDto student)
+        {
+            var result = await _studentService.UpdateStudent(student);
             return Ok(student);
         }
 
@@ -58,6 +94,43 @@ namespace webapi.Controllers
         public async Task<IActionResult> Delete(Guid Id)
         {
             return Ok(await _studentService.Delete(Id));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddStudentSubject(Guid studentId, Guid subjectId)
+        {
+            var result = await _studentService.AddStudentSubject(studentId, subjectId);
+            if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("AddStudentSubjects")]
+        public async Task<IActionResult> AddStudentSubjects(Guid studentId, List<StudentSubject> studentSubjects)
+        {
+            var result = await _studentService.AddStudentSubjects(studentId, studentSubjects);
+            if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("UpdateStudentSubjects")]
+        public async Task<IActionResult> UpdateStudentSubjects(Guid studentId, List<StudentSubject> studentSubjects)
+        {
+            var result = await _studentService.UpdateStudentSubjects(studentId, studentSubjects);
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("UpdateStudentGrades")]
+        public async Task<IActionResult> UpdateStudentGrades(GradeSaveDto grades)
+        {
+            var result = await _studentService.UpdateStudentGrades(grades);
+            return Ok(result);
         }
     }
 }

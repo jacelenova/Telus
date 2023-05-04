@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Table } from "reactstrap";
-import { getMyGrades } from "../../services/api-service";
+import { getGrades } from "../../services/api-service";
 import { AuthContext } from "../../contexts/auth-context";
 import User from "../../models/user";
 import { useNavigate } from "react-router-dom";
@@ -11,16 +11,18 @@ export const Grades = () => {
   const navigate = useNavigate();
   const [grades, setGrades] = useState([]);
 
-  const getGrades = async (user: User) => {
-    var res = await getMyGrades(user);
-    if (res.status === 200) {
-      setGrades(res.value)
+  const getStudentGrades = async (user: User) => {
+    if (user && user.studentId) {
+      var res = await getGrades(user.studentId);
+      if (res.status === 200) {
+        setGrades(res.value)
+      }
     }
   }
 
   const gradeRow = (grade: any) => {
     return (
-      <tr>
+      <tr key={grade.subjectId}>
         <td>
           {grade.subjectName}
         </td>
@@ -31,7 +33,7 @@ export const Grades = () => {
 
   useEffect(() => {
     if (user) {
-      getGrades(user);
+      getStudentGrades(user);
     }
   }, [user])
 

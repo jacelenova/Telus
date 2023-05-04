@@ -11,10 +11,12 @@ namespace webapi.Services
     public class AuthService : BaseService<User>, IAuthService
     {
         private readonly IConfiguration _config;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public AuthService(ApplicationDbContext dbContext, IConfiguration configuration) : base(dbContext)
+        public AuthService(ApplicationDbContext dbContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(dbContext)
         {
             _config = configuration;
+            _contextAccessor = httpContextAccessor;
         }
 
         public string GenerateToken(User user)
@@ -27,6 +29,7 @@ namespace webapi.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("Id", Guid.NewGuid().ToString()),
+                    new Claim("UserId", user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Sub, user.EmailAddress),
                     new Claim(JwtRegisteredClaimNames.Email, user.EmailAddress),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

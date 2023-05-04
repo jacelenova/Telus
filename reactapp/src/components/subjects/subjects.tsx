@@ -7,7 +7,7 @@ import { addSubject, deleteSubject, getSubjects } from "../../services/api-servi
 import { SubjectModal } from "../modals/subject-modal";
 
 export const Subjects = () => {
-  const { user } = useContext(AuthContext);
+  const { user, successToast } = useContext(AuthContext);
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +22,7 @@ export const Subjects = () => {
   const deleteById = async (id: string) => {
     const res = await deleteSubject(id);
     if (res.status === 200) {
+      successToast("Delete success!");
       const filtered = subjects.filter(s => s.id !== id);
       setSubjects([...filtered]);
     }

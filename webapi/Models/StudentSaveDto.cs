@@ -13,5 +13,6 @@ namespace webapi.Models
         [Required]
         [EmailAddress]
         public string EmailAddress { get; set; } = string.Empty;
+        public List<Subject> Subjects { get; set; } = new List<Subject>();
     }
 }

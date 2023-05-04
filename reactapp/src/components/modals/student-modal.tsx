@@ -1,45 +1,43 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
 import { Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, ModalFooter, Button, Alert } from "reactstrap";
 import { addStudent } from "../../services/api-service";
 import { ModalPropsType } from "../../models/props";
+import { after } from "node:test";
+import { AuthContext } from "../../contexts/auth-context";
 
-export const StudentModal = ({ isOpen, toggle, add }: ModalPropsType & { add: (subj: any) => void}) => {
+export const StudentModal = ({ isOpen, toggle, add, afterSave }: ModalPropsType & { add: (subj: any) => void}) => {
+  const { successToast, failToast } = useContext(AuthContext);
   const nameRef = useRef<HTMLInputElement>(null);
   const lastRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
-  const [isAlert, setIsAlert] = useState(false);
-
-  const toggleAlert = () => {
-    setIsAlert(prev => !prev);
-  }
 
   const save = async () => {
     if (nameRef.current && lastRef.current && emailRef.current) {
       try {
         var res = await addStudent({ firstName: nameRef.current.value, lastName: lastRef.current.value, email: emailRef.current.value });
         if (res.status === 200) {
-          add(res.value);
+          if (afterSave) {
+            await afterSave();
+          }
+          successToast();
+          toggle();
         } else {
-          setIsAlert(true);
+          failToast();
         }
       } catch (e) {
-        setIsAlert(true);
+        failToast();
       }
       nameRef.current.value = "";
     }
-    toggle();
   }
 
   return (
     <div>
-      <Alert color="danger" isOpen={isAlert} toggle={toggleAlert}>
-        Error Saving!
-      </Alert>
       <Modal isOpen={isOpen} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+        <ModalHeader toggle={toggle}>Student</ModalHeader>
         <ModalBody>
           <Form onSubmit={save}>
-            <h3>Add Subject</h3>
+            <h3>Add Student</h3>
             <hr/>
             <FormGroup floating>
               <Input

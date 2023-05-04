@@ -23,8 +23,9 @@ services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
-
+services.AddHttpContextAccessor();
 services.AddTransient<IAuthService, AuthService>();
+services.AddTransient<IUserService, UserService>();
 services.AddTransient<IStudentService, StudentService>();
 services.AddTransient<ISubjectService, SubjectService>();
 

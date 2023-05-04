@@ -1,6 +1,6 @@
 const API_BASE = "https://localhost:7265";
 
-const getToken = () => {
+export const getToken = () => {
   return localStorage.getItem("token");
 }
 
